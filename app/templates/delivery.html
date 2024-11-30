@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Delivery Routes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuR45dxdmR96769d5Zj4ifW8YvNgXlaSo&callback=initMap" async defer></script>
+    <script>
+        let map;
+        let directionsService;
+        let directionsRenderer;
+        let routeColor = '#FF0000'; // Default color for user route
+        let sharedRouteColor = '#00FF00'; // Color for shared route
+
+        function initMap() {
+            // Initialize the map centered on Madrid
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: { lat: 40.4168, lng: -3.7038 },  // Madrid coordinates
+            });
+
+            // Initialize the Directions Service and Renderer
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            // Predefined routes (hardcoded for proof of concept)
+            const route1 = [
+                { lat: 40.4168, lng: -3.7038 },  // Start: Madrid center
+                { lat: 40.4533, lng: -3.6875 }   // End: Somewhere in Madrid
+            ];
+
+            const route2 = [
+                { lat: 40.4219, lng: -3.7001 },  // Start: Madrid center
+                { lat: 40.4774, lng: -3.6586 }   // End: Another point in Madrid
+            ];
+
+            // Draw predefined routes on map
+            drawRoute(route1, '#0000FF');  // Blue color for route 1
+            drawRoute(route2, '#FF5733');  // Orange color for route 2
+        }
+
+        // Function to draw a route on the map
+        function drawRoute(route, color) {
+            const routePath = new google.maps.Polyline({
+                path: route,
+                geodesic: true,
+                strokeColor: color,
+                strokeOpacity: 1.0,
+                strokeWeight: 5,
+            });
+            routePath.setMap(map);
+        }
+
+        // Function to calculate and display a user-input route
+        function calculateRoute() {
+            const start = document.getElementById("start").value;
+            const end = document.getElementById("end").value;
+
+            if (start && end) {
+                const request = {
+                    origin: start,
+                    destination: end,
+                    travelMode: 'DRIVING',
+                };
+
+                directionsService.route(request, function(result, status) {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(result);
+
+                        // Change the color of the route drawn by the user
+                        const route = result.routes[0].overview_path;
+                        drawRoute(route, routeColor); // Display in user-specific color
+                    } else {
+                        alert('Could not calculate route: ' + status);
+                    }
+                });
+            }
+        }
+
+        // Function to calculate and display a shared route (for two trucks)
+        function calculateSharedRoute() {
+            const route1 = [
+                { lat: 40.4218, lng: -3.7038 },
+                { lat: 40.4400, lng: -3.6900 }
+            ];
+
+            const route2 = [
+                { lat: 40.4210, lng: -3.7150 },
+                { lat: 40.4370, lng: -3.6890 }
+            ];
+
+            // Logic to combine two routes and display a shared route
+            const combinedRoute = [...route1, ...route2];  // This is a basic merge for demonstration
+
+            drawRoute(combinedRoute, sharedRouteColor); // Display combined route in green
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>NGO Truck Delivery Routes</h1>
+        <p>View and plan your delivery routes. Share trucks with other NPOs for efficient deliveries.</p>
+    </header>
+
+    <main>
+        <div class="delivery-container">
+            <!-- Route Input Form -->
+            <div class="route-form">
+                <label for="start">Start Point:</label>
+                <input type="text" id="start" placeholder="Enter start address">
+
+                <label for="end">End Point:</label>
+                <input type="text" id="end" placeholder="Enter end address">
+
+                <button onclick="calculateRoute()">Calculate Route</button>
+                <button onclick="calculateSharedRoute()">Share Trucks (Combine Routes)</button>
+            </div>
+
+            <!-- Google Maps Container -->
+            <div id="map" style="height: 500px; width: 100%;"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 NGO Collaboration. All rights reserved.</p>
+    </footer>
+</body>
+</html>

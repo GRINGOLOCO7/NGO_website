@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO - Government Support</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        // JavaScript to toggle the "Add new faced challenge" form visibility
+        function toggleForm() {
+            const form = document.getElementById('new-challenge-form');
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Government & Bureaucracy Support</h1>
+        <p>Find solutions to common NGO challenges and get support for bureaucratic issues.</p>
+    </header>
+
+    <main>
+        <div class="content-container">
+            <!-- Catalog Section -->
+            <div class="catalog">
+                <h2>Common Challenges for NGOs</h2>
+
+                <div class="issue">
+                    <h3>1. Obtaining Legal Status</h3>
+                    <p>
+                        Many NGOs struggle with the complex processes of registering as a legal entity. Our PDF guide walks you through the essential steps.
+                    </p>
+                    <div class="issue-actions">
+                        <a href="{{ url_for('static', filename='pdfs/legal_status_guide.pdf') }}" download class="button">
+                            Download PDF
+                        </a>
+                        <a href="/chat" class="button">
+                            Get Support
+                        </a>
+                    </div>
+                </div>
+
+                <div class="issue">
+                    <h3>2. Fundraising and Grant Applications</h3>
+                    <p>
+                        Writing successful grant applications and managing funds is often challenging. Download our guide or chat with experts for assistance.
+                    </p>
+                    <div class="issue-actions">
+                        <a href="{{ url_for('static', filename='pdfs/fundraising_guide.pdf') }}" download class="button">
+                            Download PDF
+                        </a>
+                        <a href="/chat" class="button">
+                            Get Support
+                        </a>
+                    </div>
+                </div>
+
+                <div class="issue">
+                    <h3>3. Navigating Tax Exemptions</h3>
+                    <p>
+                        Tax exemption processes vary by region and can be daunting. This guide explains how to qualify and apply for tax exemptions.
+                    </p>
+                    <div class="issue-actions">
+                        <a href="{{ url_for('static', filename='pdfs/tax_exemption_guide.pdf') }}" download class="button">
+                            Download PDF
+                        </a>
+                        <a href="/chat" class="button">
+                            Get Support
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Add New Challenge Button -->
+                <div class="add-challenge">
+                    <button class="button" onclick="toggleForm()">Add New Faced Challenge</button>
+                </div>
+
+                <!-- New Challenge Form (Hidden by default) -->
+                <div id="new-challenge-form" style="display: none; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+                    <h3>Submit a New Challenge</h3>
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input type="text" id="title" name="title" placeholder="Enter the challenge title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea id="description" name="description" placeholder="Describe the challenge..." rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="document">Upload Document (Optional):</label>
+                            <input type="file" id="document" name="document">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="button">Submit</button>
+                            <button type="button" class="button" onclick="toggleForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 NGO Collaboration. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -7,11 +7,51 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Welcome to NGO Collaboration Platform</h1>
-    <ul>
-        <li><a href="/delivery">Delivery</a></li>
-        <li><a href="/government">Government</a></li>
-        <li><a href="/chat">Chat</a></li>
-    </ul>
+    <header>
+        <h1>NGO Collaboration Platform</h1>
+        <p>Connecting NGOs for efficient communication, logistics, and support.</p>
+    </header>
+
+    <main>
+        <div class="content-container">
+            <!-- Chat Section -->
+            <div class="section">
+                <img src="{{ url_for('static', filename='images/chat.webp') }}" alt="Chat" class="section-image">
+                <h2>Chat with NGOs</h2>
+                <p>Communicate with other NGOs in real time to coordinate efforts and share resources.</p>
+                <a href="/chat" class="button">Go to Chat</a>
+            </div>
+
+            <!-- Bureaucracy Section -->
+            <div class="section">
+                <img src="{{ url_for('static', filename='images/government.jpg') }}" alt="Bureaucracy" class="section-image">
+                <h2>Bureaucracy Made Simple</h2>
+                <p>Access templates, forms, and solutions for common governmental processes.</p>
+                <a href="/government" class="button">View Templates</a>
+            </div>
+
+            <!-- Delivery Section -->
+            <div class="section">
+                <div class="map-container">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d388698.49723034265!2d-4.009171736697514!3d40.437486181318064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422997800a3c81%3A0xc436dec1618c2269!2sMadrid!5e0!3m2!1sen!2ses!4v1732930196469!5m2!1sen!2ses"
+                        width="300"
+                        height="200"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <h2>Delivery Routes</h2>
+                <p>Find delivery routes, share trucks, and optimize transportation logistics.</p>
+                <a href="/delivery" class="button">Share Truck</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 NGO Collaboration. All rights reserved.</p>
+    </footer>
 </body>
 </html>

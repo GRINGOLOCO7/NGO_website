@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        // JavaScript for handling chat functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatGroups = document.querySelectorAll('.chat-group');
+            const chatWindow = document.getElementById('chat-window');
+            const messageList = document.getElementById('message-list');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-message');
+
+            // Predefined random messages
+            const randomMessages = [
+                "Organization A: Let's collaborate on this project!",
+                "Organization B: We need volunteers for an upcoming event.",
+                "Organization C: Does anyone have a truck for transport?",
+                "Organization D: Let's discuss the next steps for our campaign.",
+                "Organization E: Thank you for your support in the last event!",
+            ];
+
+            // Populate chat with random messages
+            function populateChat() {
+                messageList.innerHTML = ''; // Clear the chat
+                for (let i = 0; i < 5; i++) {
+                    const message = document.createElement('li');
+                    message.textContent = randomMessages[Math.floor(Math.random() * randomMessages.length)];
+                    messageList.appendChild(message);
+                }
+            }
+
+            // Open chat for a specific group
+            chatGroups.forEach(group => {
+                group.addEventListener('click', function () {
+                    const groupName = this.dataset.groupName;
+                    document.getElementById('chat-title').textContent = `Chat: ${groupName}`;
+                    chatWindow.style.display = 'block';
+                    populateChat();
+                });
+            });
+
+            // Send a new message
+            sendButton.addEventListener('click', function () {
+                const newMessage = messageInput.value.trim();
+                if (newMessage) {
+                    const message = document.createElement('li');
+                    message.textContent = `You: ${newMessage}`;
+                    messageList.appendChild(message);
+                    messageInput.value = ''; // Clear the input
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>NGO Chat</h1>
+        <p>Collaborate with other organizations in real time.</p>
+    </header>
+
+    <main>
+        <div class="content-container">
+            <!-- Chat Groups Section -->
+            <div class="chat-groups">
+                <h2>Available Chat Groups</h2>
+                <ul>
+                    <li class="chat-group" data-group-name="Support">Education</li>
+                    <li class="chat-group" data-group-name="Health">Health</li>
+                    <li class="chat-group" data-group-name="Environment">Environment</li>
+                    <li class="chat-group" data-group-name="Logistics">Logistics</li>
+                    <li class="chat-group" data-group-name="Advocacy">Advocacy</li>
+                </ul>
+            </div>
+
+            <!-- Chat Window -->
+            <div id="chat-window" class="chat-window" style="display: none;">
+                <h2 id="chat-title">Chat: Group Name</h2>
+                <ul id="message-list">
+                    <!-- Messages will be dynamically added here -->
+                </ul>
+                <div class="chat-input">
+                    <input type="text" id="message-input" placeholder="Write a message..." />
+                    <button id="send-message" class="button">Send</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
