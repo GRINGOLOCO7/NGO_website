@@ -9,7 +9,7 @@ In our Synergy class we explore the challenges faced by non-profit orgaization e
 
 2. Burocracy ([government.html](https://github.com/GRINGOLOCO7/NGO_website/blob/main/app/templates/government.html)): NGOs fight against burocracy and governament rules every day. Have all paper work done is a very time expensive taks. In our website, NGOs can find and uplad templates on how to skip this process faster
 
-3. Delivery ([delivery.html](https://github.com/GRINGOLOCO7/NGO_website/blob/main/app/templates/delivery.html)): Delivery merchandise is expensive and continuous task. Moving materials and commodities is costly inefficient for NGOs. Here we offer a platform to share similar routes with same truck to decrease costas and increase frequency. Point of departure and point of delivery are inputed and the algorithm matck similar desire routes togheter, connecting NGOs in close collaboration.
+3. Delivery ([delivery.html](https://github.com/GRINGOLOCO7/NGO_website/blob/main/app/templates/delivery.html)): Delivery merchandise is expensive and continuous task. Moving materials and commodities is costly inefficient for NGOs. Here we offer a platform to share similar routes with same truck to decrease costas and increase frequency. Point of departure and point of delivery are inputed and the algorithm matck similar desire routes togheter, connecting NGOs in close collaboration. To find the best route to take we use the build in function (`optimizeWaypoints: true`) in the Google Map API that calculate the fastest route trough our pick up and delivery
 
 ---
 In the home page ([index.html](https://github.com/GRINGOLOCO7/NGO_website/blob/main/app/templates/index.html)) the 3 containers are in this form:

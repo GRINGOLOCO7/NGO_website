@@ -62,35 +62,24 @@
     <script>
         let map;
         let directionsService;
-        let directionsRenderer;
-
-        // Array to store route renderers so they can be removed
         let routeRenderers = [];
 
+        // Store predefined routes
+        const predefinedRoutes = [
+            { start: "C. de Ruiz de Alarcón, 23, 28014 Madrid", end: "C. de Alcalá, 93-75, Salamanca, 28009 Madrid" }, // A1 -> B1
+            { start: "P.º de la Castellana, 49, Chamberí, 28046 Madrid", end: "Goya, Salamanca, Madrid" }, // A2 -> B2
+        ];
+
         function initMap() {
-            // Initialize the map centered on Madrid
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 13,
                 center: { lat: 40.4168, lng: -3.7038 }, // Madrid coordinates
             });
 
             directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer();
-            directionsRenderer.setMap(map);
-
-            // Predefined routes with real driving directions
-            calculatePredefinedRoute(
-                "C. de Ruiz de Alarcón, 23, 28014 Madrid", // A1
-                "C. de Alcalá, 93-75, Salamanca, 28009 Madrid" // B1
-            );
-
-            calculatePredefinedRoute(
-                "P.º de la Castellana, 49, Chamberí, 28046 Madrid", // A2
-                "Goya, Salamanca, Madrid" // B2
-            );
+            showPredefinedRoutes(); // Initially show predefined routes
         }
 
-        // Function to clear all old routes
         function clearRoutes() {
             for (const renderer of routeRenderers) {
                 renderer.setMap(null); // Remove each renderer from the map
@@ -98,18 +87,17 @@
             routeRenderers = []; // Reset the renderers array
         }
 
-        // Function to calculate and render predefined routes
         function calculatePredefinedRoute(startAddress, endAddress) {
             const newRenderer = new google.maps.DirectionsRenderer({
                 map: map,
                 polylineOptions: {
-                    strokeColor: getRandomColor(), // Set unique color for each route
+                    strokeColor: getRandomColor(), // Unique color for predefined routes
                     strokeWeight: 6,
                 },
                 suppressMarkers: false,
             });
 
-            routeRenderers.push(newRenderer); // Store the renderer for later removal
+            routeRenderers.push(newRenderer);
 
             directionsService.route(
                 {
@@ -127,24 +115,31 @@
             );
         }
 
-        // Calculate user route (A3 -> B3)
+        function showPredefinedRoutes() {
+            clearRoutes(); // Clear all routes first
+            predefinedRoutes.forEach(route => {
+                calculatePredefinedRoute(route.start, route.end);
+            });
+        }
+
         function calculateUserRoute() {
             const start = document.getElementById("start").value;
             const end = document.getElementById("end").value;
 
             if (start && end) {
-                clearRoutes(); // Clear old routes before showing a new one
+                clearRoutes(); // Clear old routes
+                showPredefinedRoutes(); // Restore predefined routes
 
                 const newRenderer = new google.maps.DirectionsRenderer({
                     map: map,
                     polylineOptions: {
-                        strokeColor: "#007bff",
+                        strokeColor: "#007bff", // User route color
                         strokeWeight: 6,
                     },
                     suppressMarkers: false,
                 });
 
-                routeRenderers.push(newRenderer); // Store the renderer
+                routeRenderers.push(newRenderer);
 
                 directionsService.route(
                     {
@@ -160,31 +155,34 @@
                         }
                     }
                 );
+            } else {
+                alert("Please enter both start and end addresses.");
             }
         }
 
-        // Calculate shared route (A3 -> A2 -> B2 -> B3)
         function calculateSharedRoute() {
-            const start = document.getElementById("start").value; // A3
-            const end = document.getElementById("end").value; // B3
+            const start = document.getElementById("start").value;
+            const end = document.getElementById("end").value;
 
             if (start && end) {
-                clearRoutes(); // Clear all previous routes
+                clearRoutes(); // Clear previous routes
 
                 const newRenderer = new google.maps.DirectionsRenderer({
                     map: map,
                     polylineOptions: {
-                        strokeColor: "#FF5733", // Use a distinct color for the shared route
+                        strokeColor: "#FF5733", // Shared route color
                         strokeWeight: 6,
                     },
                     suppressMarkers: false,
                 });
 
-                routeRenderers.push(newRenderer); // Store the renderer
+                routeRenderers.push(newRenderer);
 
                 const waypoints = [
-                    { location: "P.º de la Castellana, 49, Chamberí, 28046 Madrid", stopover: true }, // A2
-                    { location: "Goya, Salamanca, Madrid", stopover: true }, // B2
+                    { location: "C. de Ruiz de Alarcón, 23, 28014 Madrid", stopover: true },
+                    { location: "C. de Alcalá, 93-75, Salamanca, 28009 Madrid", stopover: true },
+                    { location: "P.º de la Castellana, 49, Chamberí, 28046 Madrid", stopover: true },
+                    { location: "Goya, Salamanca, Madrid", stopover: true },
                 ];
 
                 directionsService.route(
@@ -192,6 +190,7 @@
                         origin: start,
                         destination: end,
                         waypoints: waypoints,
+                        optimizeWaypoints: true,
                         travelMode: google.maps.TravelMode.DRIVING,
                     },
                     (result, status) => {
@@ -205,7 +204,6 @@
             }
         }
 
-        // Utility to generate a random color for routes
         function getRandomColor() {
             const letters = "0123456789ABCDEF";
             let color = "#";
@@ -215,14 +213,12 @@
             return color;
         }
     </script>
-
 </head>
 <body>
     <header>
         <h1>NGO Delivery Routes</h1>
         <p>Plan your delivery routes or collaborate with other NPOs.</p>
     </header>
-
     <main>
         <div class="route-form">
             <h2>Enter Your Delivery Route</h2>
@@ -230,12 +226,10 @@
             <input type="text" id="end" placeholder="Enter delivery address (B3)">
             <br>
             <button onclick="calculateUserRoute()">Show My Route</button>
-            <button onclick="calculateSharedRoute()">Show Shared Route</button>
+            <button onclick="calculateSharedRoute()">Show Optimized Shared Route</button>
         </div>
-
         <div id="map"></div>
     </main>
-
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_API&callback=initMap"></script>
 </body>
 </html>
